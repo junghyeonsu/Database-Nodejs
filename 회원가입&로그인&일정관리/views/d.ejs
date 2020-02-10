@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>일정루 관리</title>
+    <style>
+        table, td , tr{
+            border-collapse: collapse;
+            border : 1px solid black;
+            margin-top: 20px;
+        }
+
+        table {
+            width: 100%; 
+        }
+
+        td {
+            padding: 15px;
+        }
+
+        .data {
+            height: 300px;
+        }   
+    </style>
+</head>
+<body>
+
+    <form action="/name/delete" method="post">
+    안녕하세요 <%= (name) %>님
+    <input type="hidden" name= "name1" value=<%= (id) %> />
+    <button>회원탈퇴</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <td>월</td> <td>화</td> <td>수</td> <td>목</td> <td>금</td> <td>토</td> <td>일</td>
+            </tr>
+        </thead>
+        <tbody>
+            <tr class="data">
+                <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
+
