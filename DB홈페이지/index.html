@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8" />
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" />
+    <style>
+        body {
+            margin-top : 5% ;
+            margin-left : 5% ;
+        }
+
+        .form-control {
+            width: 50%;
+        }
+    </style>
+    </head>
+    <body>
+        <h3>데이터 베이스 정복하기</h3>
+    
+    <div class="form-group">
+        <form method="post">
+            아이디 : <input type="text" name="userId" class="form-control" /> <br />
+            비밀번호 : <input type="password" name="password" class="form-control" /> <br />
+            이름 : <input type="text" name = "name" class="form-control" /> <br />
+            <button class="btn" formaction="/input">DB넣기</button>
+            <button class="btn" formaction="/show">DB보기</button>
+        </form>
+    </div>
+    </body>
+</html>
