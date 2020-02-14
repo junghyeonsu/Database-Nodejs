@@ -23,14 +23,70 @@
         .data {
             height: 300px;
         }   
+
+        .modal {
+            display: none; /* Hidden by default */
+            position: fixed; /* Stay in place */
+            z-index: 1; /* Sit on top */
+            left: 0;
+            top: 0;
+            width: 100%; /* Full width */
+            height: 100%; /* Full height */
+            overflow: auto; /* Enable scroll if needed */
+            background-color: rgb(0,0,0); /* Fallback color */
+            background-color: rgba(0,0,0,0.4); /* Black w/ opacity */
+        }
+    
+        /* Modal Content/Box */
+        .modal-content {
+            background-color: #fefefe;
+            margin: 15% auto; /* 15% from the top and centered */
+            padding: 20px;
+            border: 1px solid #888;
+            width: 25%; /* Could be more or less, depending on screen size */                          
+        }
+        /* The Close Button */
+        .close {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+        }
+        .close:hover,
+        .close:focus {
+            color: black;
+            text-decoration: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
+    <div id="myModal" class="modal">
+ 
+        <!-- Modal content -->
+        <div class="modal-content">
+          <span class="close">&times;</span>                                                               
+          <p>
+              <form id="add" method="post">
+              <input type="hidden" id="id1" name = "name1" value = '<%=(id)%>' />
+                  요일 : <input type="text" id = "days" name="day"> <br> <br>
+                  일정 : <input type="text" id ="todo" name = "todo" value ="">
+              <button>제출!</button>
+              </form>
+          </p>
+        </div>
+    
+    </div>
+
     <form action="/name/delete" method="post">
-    안녕하세요 <%= (name) %>님
-    <input type="hidden" name= "name1" value=<%= (id) %> />
+    안녕하세요 <%= (id) %>님
+    <input type="hidden" id="a" name= "name1" value= '<%= (id) %>' />
     <button>회원탈퇴</button>
+    </form>
+    
+    <form id= "logout" action="/">
+        <button>로그아웃</button>
     </form>
 
     <table>
@@ -40,11 +96,175 @@
             </tr>
         </thead>
         <tbody>
-            <tr class="data">
-                <td></td> <td></td> <td></td> <td></td> <td></td> <td></td> <td></td>
-            </tr>
+            <td id="Mon">
+                <ol >
+                   <% for(var i=0; i<Monday.length; i++) {%>
+                       <li><%= Monday[i] %></li>
+                    <% } %>
+                </ol> 
+               </td>
+               <td id="Tue">
+                <ol >
+                   <% for(var i=0; i<Tuesday.length; i++) {%>
+                       <li><%= Tuesday[i] %></li>
+                    <% } %>
+                </ol>
+               </td>
+               <td id="Wen">
+                   <ol >
+                       <% for(var i=0; i<Wendsday.length; i++) {%>
+                           <li><%= Wendsday[i] %></li>
+                        <% } %>
+                   </ol>
+               </td>
+               <td id="Tur">
+                   <ol >
+                       <% for(var i=0; i<Thuray.length; i++) {%>
+                           <li><%= Thuray[i] %></li>
+                        <% } %>
+                   </ol>
+               </td> 
+               <td id="Fri">
+                   <ol>
+                       <% for(var i=0; i<Friday.length; i++) {%>
+                           <li><%= Friday[i] %></li>
+                        <% } %>
+                   </ol>
+               </td> 
+               <td id="Sat">
+                   <ol >
+                       <% for(var i=0; i<Saturday.length; i++) {%>
+                           <li><%= Saturday[i] %></li>
+                        <% } %>
+                   </ol>
+               </td> 
+               <td id="Sun">
+                   <ol >
+                       <% for(var i=0; i<Sunday.length; i++) {%>
+                           <li><%= Sunday[i] %></li>
+                        <% } %>
+                   </ol>
+               </td>
+   
         </tbody>
     </table>
 </body>
+
+
+<script>
+    var modal = document.getElementById('myModal');
+        var span = document.getElementsByClassName("close")[0];                                          
+        span.onclick = function() {
+        modal.style.display = "none";
+        }
+  
+  window.onclick = function(event){
+
+    switch(event.target.id){
+      case "Mon" :
+          modal.style.display = "block";
+          document.getElementById('days').value = '월';
+          break;
+
+      case "Tue" :
+          modal.style.display = "block";
+          document.getElementById('days').value = '화';
+          break;
+          
+      case "Wen" :
+          modal.style.display = "block";
+          document.getElementById('days').value = '수';
+          break;
+
+       case "Tur" :
+          modal.style.display = "block";
+          document.getElementById('days').value = '목';
+          break;
+
+      case "Fri" :
+          modal.style.display = "block";
+          document.getElementById('days').value = '금';
+          break;
+
+       case "Sat" :
+          modal.style.display = "block";
+          document.getElementById('days').value = '토';
+          break;
+
+       case "Sun" :
+          modal.style.display = "block";
+          document.getElementById('days').value = '일';
+          break;
+
+        default :
+          break;
+    }
+
+    if($(event.target).parents('td').attr('id')){
+        if(confirm('정말삭제하시겠습니까?')){
+            $.ajax(
+                 { type: "POST",
+                    url: '/name/deleteList', 
+                    data: {
+                     id : $('#a').val(),
+                     day : $(event.target).parents('td').attr('id'),
+                     todo : $(event.target).text(),
+               }, 
+               success: function(){
+                   alert('입력성공!!');
+               }, 
+            });
+        $(event.target).remove();
+        }
+        else{
+            alert('취소하였습니다.')
+        }
+    }
+
+  }
+
+  document.getElementById("add").addEventListener('submit',function(e){
+    e.preventDefault();
+    $.ajax({
+        type: "POST",
+        url : '/name/addList',
+        data : {
+            id : $('#id1').val(),
+            day : $('#days').val(),
+            todo : $('#todo').val()
+        },
+        success : function(){
+            alert('입력성공해따~');
+        }
+    });
+    var text2 = $('#todo').val();
+            var li = document.createElement('li');
+            var text = document.createTextNode(text2);
+            li.appendChild(text);    
+        if($('#days').val() =='월'){
+            document.getElementById('Mon').childNodes[1].appendChild(li)
+        }
+        else if($('#days').val() =='화'){
+            document.getElementById('Tue').childNodes[1].appendChild(li)
+        }
+        else if($('#days').val() =='수'){
+            document.getElementById('Wen').childNodes[1].appendChild(li)
+        } 
+        else if($('#days').val() =='목'){
+            document.getElementById('Tur').childNodes[1].appendChild(li)
+        }
+        else if($('#days').val() =='금'){
+            document.getElementById('Fri').childNodes[1].appendChild(li)
+        }
+        else if($('#days').val() =='토'){
+            document.getElementById('Sat').childNodes[1].appendChild(li)
+        }
+        else if($('#days').val() =='일'){
+            document.getElementById('Sun').childNodes[1].appendChild(li)
+        }
+  });
+
+  </script>
+  <script src="http://code.jquery.com/jquery-latest.min.js"></script>
 </html>
 

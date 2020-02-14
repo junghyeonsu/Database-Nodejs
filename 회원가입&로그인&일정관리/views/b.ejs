@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.2/css/bootstrap.min.css" />
+    <script>
+        function onClickTd(event) {
+          document.getElementById("deleteUniqueNumber").innerHTML = event.target.innerHTML; 
+          document.getElementById("input").value = event.target.innerHTML;
+        }
+    </script>
+    <style>
+        .hover:hover{
+            background-color: burlywood;
+        }
+        .btn-delete{
+            margin-left: 3%;
+        }
+    </style>
+</head>
+<body>
+    <table class="table">
+        <thead>
+            <tr>
+                <td>Unique-Id</td> <td>Id</td> <td>Password</td> <td>Name</td> <td>Register-date</td>
+            </tr>
+        </thead>
+        <tbody>
+            <% for ( var i = 0; i < user.id.length; i++){ %>
+                <tr>
+                    <td class="hover"  onclick="onClickTd(event)"><%= (user.uniqueId[i]) %> </td>
+                    <td> <%= (user.id[i]) %> </td>
+                    <td> <%= (user.password[i]) %> </td>
+                    <td> <%= (user.name[i]) %> </td>
+                    <td> <%= (user.register_date[i]) %> </td>
+                </tr>
+            <% } %>
+        </tbody>
+    </table>
+
+    <form class="form" method="post">
+        <input type="hidden" id="input" name= "deleteNumber" value="" />
+        <button class="btn btn-delete" formaction="/delete"><span id="deleteUniqueNumber"></span>번 삭제하기</button>
+    </form>
+
+</body>
+</html>
+

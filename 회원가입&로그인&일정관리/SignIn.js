@@ -39,7 +39,7 @@ app.post('/name',function(req,res){
         }
 
         if(checked == 1){
-            res.render('d',{
+            res.render('e',{
                 name : name1,
                 id : realid,
             })
@@ -81,16 +81,19 @@ app.post('/success',function(req,res){
             var sql2 = `insert into infor2 (name,id,password) values('${name}','${id}','${pass}') `;
             connection.query(sql2,function(err,row,field){
                 console.log('입력성공!');
-                res.send(`<script>  
-                history.go(-2);
-            </script>`);
-
-            })
-        }else{
-            res.send(`<script>
-                alert('중복된 아이디야!');
-                history.back();
-            </script>`);
+        })
+        var sql8 = `create table ${id}(
+            day varchar(256) NOT NULL,
+            todo varchar(256) NOT NULL)
+        `;
+        connection.query(sql8,function(err,row,field){
+            if(err) throw err;
+        })
+        res.send(`<script>alert('회원가입되었습니다.');
+            history.go(-2)</script>`);
+        }else if(checked == 1){
+            res.send(`script>alert('아이디가 중복되었습니다.');
+            history.back();</script>`)
         }
     })
 })
@@ -197,6 +200,107 @@ app.post("/name/delete",function(req,res){
         }
     })
 });
+
+app.post('/name/addList',function(req,res){
+    var day = req.body.day;
+    var id = req.body.id;
+    var todo = req.body.todo;
+    var sql9 = `insert into ${id} (day,todo) values('${day}','${todo}')`;
+    connection.query(sql9,function(err,row,field){
+        if(err) throw err;
+        console.log('일정 추가 성공!');
+    })
+})
+
+app.post('/name/List',function(req,res){
+    var id = req.body.id;
+    var sql10 = `select * from ${id}`;
+
+    connection.query(sql10,function(err,row,field){
+        if(err) throw err;
+        var mon = [];
+        var tue = [];
+        var wen = [];
+        var tur = [];
+        var fri = [];
+        var sat = [];
+        var sun = [];
+        for(var i = 0 ; i<row.length;i++){
+            switch (row[i].day) {
+                case '월':
+                    mon.push(row[i].todo);
+                    break;
+                case '화':
+                    tue.push(row[i].todo);
+                    break;
+                case '수':
+                    wen.push(row[i].todo);
+                    break;
+                case '목':
+                    tur.push(row[i].todo);
+                    break;
+                case '금':
+                    fri.push(row[i].todo);
+                    break;
+                case '토':
+                    sat.push(row[i].todo);
+                    break;
+                case '일':
+                    sun.push(row[i].todo);
+                    break;
+                default:
+                    break;
+            }
+        }
+        res.render('d',{
+            id : id,
+            Monday : mon,
+            Tuesday : tue,
+            Wendsday : wen,
+            Thuray : tur,
+            Friday : fri,
+            Saturday : sat,
+            Sunday : sun,
+        })
+    })
+})
+
+app.post('/name/deleteList',function(req,res){
+    var day = req.body.day;
+    var todo = req.body.todo;
+    var id = req.body.id;
+    switch (day) {
+        case 'Mon':
+            day = '월';
+            break;
+        case 'Tue':
+             day = '화';
+             break;
+        case 'Wen':
+             day = '수';
+             break;
+        case 'Tur':
+             day = '목';
+             break;
+        case 'Fri':
+             day = '금';
+             break;
+        case 'Sat':
+             day = '토';
+             break;
+        case 'Sun':
+             day = '일';
+            break;
+        default:
+            break;
+    }
+    var sql11 = `delete from ${id} where day='${day}' and todo='${todo}'`;
+    connection.query(sql11,function(err,row,field){
+        if(err) throw err;
+        console.log('제거성공');   
+    })
+    
+})
 
 app.listen(7000,function(){
     console.log('hello');
